@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/provider/cart.dart';
 import 'package:shop_app/provider/products.dart';
 import '../widgets/grid.dart';
+import '../widgets/badge.dart';
+import 'cartinfo.dart';
 
 class ProductGrid extends StatelessWidget {
   final bool showfavs;
@@ -66,6 +69,18 @@ class _HomePageState extends State<HomePage> {
                 value: 1,
               )
             ],
+          ),
+          Consumer<CartItem>(
+            builder: (_, Cart, value) => Badge(
+                child: IconButton(
+                    icon: Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(CartInfo.routeName);
+                    }),
+                value: Cart.itemcount.toString()),
           )
         ],
       ),

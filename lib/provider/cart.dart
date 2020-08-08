@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class CartModel {
   final String id;
@@ -16,7 +18,27 @@ class CartItem with ChangeNotifier {
     return {..._items};
   }
 
+  int get itemcount {
+    return _items.length;
+  }
+
+  double get totalsum {
+    var total = 0.0;
+
+    _items.forEach((key, CartModel) {
+      total += CartModel.price * CartModel.quantity;
+    });
+    return total;
+  }
+
   void additems(String id, String title, double price) {
+    const url = 'https://shop-app-2813.firebaseio.com/detail.json';
+    http.post(
+      url,
+      body: json.encode(
+        {'title': title, 'price': price},
+      ),
+    );
     if (_items.containsKey(id)) {
       _items.update(
         id,
@@ -36,5 +58,6 @@ class CartItem with ChangeNotifier {
             quantity: 1),
       );
     }
+    notifyListeners();
   }
 }
